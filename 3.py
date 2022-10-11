@@ -1,3 +1,2 @@
-print('Hello World')
-for i in range(10):
-    print(1)
+import time
+print(time.strftime('%a'))
