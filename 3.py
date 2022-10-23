@@ -2,14 +2,50 @@ import telebot as tl
 from telebot import types
 import time
 import sqlite3
+import random
+
 bot = tl.TeleBot('5762048157:AAEBAjpvAQaJpqY278awgR9JrcY9zDe-w28')
 
 #Рулетка
-conn = sqlite3.connect('Rasp.db')
-cur = conn.cursor()
+
+MasWinRes = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 8, 8, 8, 16, 16, 32]
+WinRes = random.choice(MasWinRes)
+print(WinRes)
+
+def Balance(id):
+    conn = sqlite3.connect('Rasp.db')
+    cur = conn.cursor()
+    info = f"SELECT Bale FROM Balance WHERE Student_id = {id}"
+    cur.execute(info)   
+    return(cur.fetchone()[0])
+#record = """INSERT INTO Balance
+#            (Student_id, Bale)
+#            VALUES
+#            (12959, 100)"""
+#dob = cur.execute(record)
+#conn.commit()
+#def Balance(id):
+#1255124
+
+
+def Nal(sid):
+    conn = sqlite3.connect('Rasp.db')
+    cur = conn.cursor()
+    info = f"SELECT Student_id FROM Balance WHERE Student_id = {sid}"
+    cur.execute(info)
+    if cur.fetchone() == None:
+        record = f"INSERT INTO Balance (Student_id, Bale) VALUES ({sid}, 100)"
+        dob = cur.execute(record)
+        conn.commit()
+        
+    
+
+
+#Чат
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     user_id = message.from_user.id
+    Nal(user_id)
     if message.text == "/Start":
         keyboard = types.InlineKeyboardMarkup()
         key1 = types.InlineKeyboardButton(text='Игра в рулетку', callback_data='Play')
@@ -19,6 +55,8 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, text="Выбери чем хочешь заняться?\n1)Игра в рулетку\n2)Расписание на завтра", reply_markup=keyboard)
     elif message.text == "/help":
         bot.send_message(message.from_user.id, "Привет, я бот, который поможет тебе коротать твое время или собраться на завтра!Для начала напиши /Start.")
+    if message.text == "Баланс":
+        bot.send_message(message.from_user.id, f"Твой баланс: {Balance(user_id)}")
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
 
@@ -49,7 +87,7 @@ def callback_worker(call):
             elif time.strftime('%a') == 'Wed':
                 bot.send_message(call.message.chat.id, '11:20 - 12:55:\n2)Высшая математика(Данилов В.Г., пр) --- Н - 452\n13:10 - 14:45:\n3)Физ-ра(Алескеров Р.Р.)\n15:25 - 17:00:\n4)Сэпиб(Кораблева Е.В., пр) --- Н - 424\n17:15 - 18:50:\n5)Философия(Кораблева Е.В., пр) --- Н - 131')
             elif time.strftime('%a') == 'Thu':
-                bot.send_message(call.message.chat.id, '09:30 - 11:05:\n1)История инфокоммуникации(Бажин А.В., л) --- Н - 344\n11:20 - 12:55:\n2)Высшая математика(Данилов В.Г., л) --- Н - 301\n13:10 - 14:45:\n3)Иностранный язык(Чупак Н.М., пр) --- Н - 406\n15:25 - 17:00:\n4)Философия(Кораблева Е.В., пр) --- Н - 131')
+                bot.send_message(call.message.chat.id, '09:30 - 11:05:\n1)История инфокоммуникации(Бажин А.В., л) --- Н - 344\n11:20 - 12:55:\n2)Высшая математика(Данилов В.Г., л) --- Н - 301\n13:10 - 14:45:\n3)Иностранный язык(Чупак Н.М., пр) --- Н - 406')
             elif time.strftime('%a') == 'Fri':
                 bot.send_message(call.message.chat.id, '09:30 - 11:05:\n1)История инфокоммуникации(Бажин А.В., пр) --- Н - 450\n11:20 - 12:55:\n2)Информационная экология(Ерофеева В.В., лаб) --- Н - 454\n13:10 - 14:45:\n3)Сэпиб(Кораблева Е.В., пр) --- Н - 318\n15:25 - 17:00:\n4)Сэпиб(Кораблева Е.В., пр) --- Н - 318\n17:15 - 18:50:\n5)История инфокоммуникации(Бажин А.В., л) --- Н - 344')
             elif time.strftime('%a') == 'Sat':
