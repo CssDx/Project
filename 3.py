@@ -4,7 +4,7 @@ import time
 import sqlite3
 import random
 
-bot = tl.TeleBot('5762048157:AAEBAjpvAQaJpqY278awgR9JrcY9zDe-w28')
+bot = tl.TeleBot('-')
 
 #Рулетка
 
